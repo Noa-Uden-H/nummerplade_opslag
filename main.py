@@ -1,2 +1,2 @@
-import functions
-functions.test()
+import text_reading
+text_reading.test()
