@@ -1,13 +1,22 @@
-def ocr(imgpath,imname):
+def ocr(imgpath,imname) -> str:
     import cv2
     import pytesseract as tess
     from matplotlib import pyplot as plt
 
+    tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
     img = cv2.imread(imgpath)
-    cv2.imshow(imname,img)
+    #--Remove--
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    blur = cv2.blur(gray, (3,3), 1)
+    #----------
+    thresh = cv2.threshold(blur, 110,255, cv2.THRESH_BINARY)[1]
+    cv2.imshow(imname,thresh)
+    extracted_text = tess.image_to_string(thresh, config="--psm 6")
 
     cv2.waitKey(0) # Waits for any key
     cv2.destroyAllWindows()
+    return extracted_text
     
 
 if __name__ == "__main__":
@@ -20,4 +29,5 @@ if __name__ == "__main__":
     for img in os.scandir(imagesfolder):
         if img.is_file():
             path = img.path
-            ocr(path,str(img))
+            text = ocr(path,str(img))
+            print(text)
