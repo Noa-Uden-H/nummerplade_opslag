@@ -1,10 +1,9 @@
-def ocr(imgpath,imname) -> str:
+def ocr(img, imname) -> str:
     import cv2
     import pytesseract as tess
 
     tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-    img = cv2.imread(imgpath)
     cv2.imshow(imname,img)
     extracted_text = tess.image_to_string(img, config="--psm 6")
 

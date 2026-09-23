@@ -30,12 +30,13 @@ def IP(image):
             # Et rektangel har et forhold der afviger fra 1.0 (som er kvadrat)
             shape = "square" if 0.95 <= ar <= 1.05 else "rectangle"
 
-            cropped_img = thresh[y:y+h, x:x+w]
+            thresh = thresh[y:y+h, x:x+w]
            
 
-    cv2.imshow("Resultat", cropped_img)
+    cv2.imshow("Resultat", thresh)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+    return thresh
 
 
 if __name__ == "__main__":
