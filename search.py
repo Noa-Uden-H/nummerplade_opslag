@@ -13,7 +13,7 @@ def search_plate(plate: str) -> str:
     try:
         html = urlopen(req).read().decode("utf-8")
     except (HTTPError, URLError) as e:
-        print(invalid(e))
+        print(f"Error {e}")
 
     data = find_data("title", html)
     return data
@@ -28,9 +28,6 @@ def find_data(h_type: str, html):
         return re.sub("<.*?>", "", results_header.group())
     return "Header not found"
 
-        
-def invalid(e) -> str:
-    return f"Error {e}"
 
 
 def test(plate) -> str:
