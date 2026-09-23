@@ -24,7 +24,7 @@ if __name__ == "__main__":
     import os
     # import cv2
 
-    imagesfolder = os.path.expanduser("~\\OneDrive - TEC\\Documents\\hcoe\\2.m\\informatik_b\\5_machinelearning\\Projekt\\nrplates")
+    imagesfolder = os.path.expanduser("~\\OneDrive - TEC\\Documents\\_hcoe\\3.m\\informatik_b\\5_machinelearning\\Projekt\\nrplates")
     
     for img in os.scandir(imagesfolder):
         if img.is_file():
