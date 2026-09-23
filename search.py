@@ -45,7 +45,7 @@ def test(plate) -> str:
     try:
         html = urlopen(req).read().decode("utf-8")
     except (HTTPError, URLError) as e:
-        print(invalid(e)) 
+        print(f"Error {e}") 
     return html
 
 
