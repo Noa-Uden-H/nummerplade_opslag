@@ -1,7 +1,20 @@
 def ocr(imgpath,imname) -> str:
     import cv2
     import pytesseract as tess
-    from matplotlib import pyplot as plt
+
+    tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+    img = cv2.imread(imgpath)
+    cv2.imshow(imname,img)
+    extracted_text = tess.image_to_string(img, config="--psm 6")
+
+    cv2.waitKey(0) # Waits for any key
+    cv2.destroyAllWindows()
+    return extracted_text
+
+def ocr_test(imgpath, imname) -> str:
+    import cv2
+    import pytesseract as tess
 
     tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
@@ -17,7 +30,6 @@ def ocr(imgpath,imname) -> str:
     cv2.waitKey(0) # Waits for any key
     cv2.destroyAllWindows()
     return extracted_text
-    
 
 if __name__ == "__main__":
     # import pathlib
@@ -29,5 +41,5 @@ if __name__ == "__main__":
     for img in os.scandir(imagesfolder):
         if img.is_file():
             path = img.path
-            text = ocr(path,str(img))
+            text = ocr_test(path,str(img))
             print(text)
