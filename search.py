@@ -1,5 +1,3 @@
-
-
 def search_plate(plate: str) -> str:
     from urllib.request import urlopen, Request
     from urllib.error import HTTPError, URLError
@@ -18,7 +16,7 @@ def search_plate(plate: str) -> str:
         print(invalid(e))
 
     data = find_data("title", html)
-    print(data)
+    return data
 
 
 def find_data(h_type: str, html):
