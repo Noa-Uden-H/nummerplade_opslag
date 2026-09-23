@@ -30,20 +30,49 @@ def IP(image):
             # Et rektangel har et forhold der afviger fra 1.0 (som er kvadrat)
             shape = "square" if 0.95 <= ar <= 1.05 else "rectangle"
 
-            cropped_img = thresh[y:y+h, x:x+w]
+            thresh = thresh[y:y+h, x:x+w]
            
 
-    cv2.imshow("Resultat", cropped_img)
+    cv2.imshow("Resultat", thresh)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+    return thresh
 
+
+def EUC(image):
+    contours, _ = cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    
+    for contour in contours:
+        # Filtrér helt små støj-konturer fra
+        if cv2.contourArea(contour) < 300:
+            continue
+    
+        # 1. Tilnærm konturen til en geometrisk form
+        peri = cv2.arcLength(contour, True)
+        approx = cv2.approxPolyDP(contour, 0.02 * peri, True)
+    
+        # 2. Tjek om formen har 4 hjørner (rektangel / kvadrat)
+        if len(approx) == 4:
+            print("test")
+            x, y, w, h = cv2.boundingRect(approx)
+            ar = w / float(h)
+    
+            # Et rektangel har et forhold der afviger fra 1.0 (som er kvadrat)
+            shape = "square" if 0.95 <= ar <= 1.05 else "rectangle"
+    
+            EUC = image[y:y+h, x:x+w]
+
+            cv2.imshow("Resultat EUC", EUC)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
 
 if __name__ == "__main__":
     # Sti og filnavn fra din anden kode (Projekt Nummerplade genkendelse)
     mydir = os.path.expanduser(
         "~\\OneDrive - TEC\\Informatik\\3.g\\Machine learning\\Projekt Nummerplade genkendelse\\Billeder_test"
     )
-    myfile = "IMG_7076.jpg"
+    # myfile = "IMG_7076.jpg"
+    myfile = "Screenshot 2026-09-23 144340.png"
 
     path = pathlib.Path(mydir, myfile)
     image = cv2.imread(str(path))
@@ -52,4 +81,5 @@ if __name__ == "__main__":
         print(f"Fejl: Kunne ikke finde eller åbne billedet på stien:\n{path}")
     else:
         image = cv2.resize(image, (1000, 600))
-        IP(image)
+        plate = IP(image)
+        EUC(plate)
