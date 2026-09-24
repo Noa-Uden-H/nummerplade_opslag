@@ -40,40 +40,39 @@ def IP(image):
 
 
 def EUC(image):
-    # 1. Inverter billedet, så det sorte EU-felt bliver hvidt
-    # OpenCV finder altid hvide objekter på sort baggrund
     INV_image = cv2.bitwise_not(image)
-
-    # 2. Find konturer på det inverterede billede
     contours, _ = cv2.findContours(INV_image, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
     EUC_crop = None
+    plate_without_EUC = None  # Billedet hvor EU-mærket er fjernet
 
     for contour in contours:
-        # Filtrér helt små støj-konturer fra
         if cv2.contourArea(contour) < 500:
             continue
 
-        # Tilnærm konturen til en geometrisk form
         peri = cv2.arcLength(contour, True)
         approx = cv2.approxPolyDP(contour, 0.02 * peri, True)
 
-        # Tjek om formen har 4 hjørner (rektangel)
         if len(approx) == 4:
             x, y, w, h = cv2.boundingRect(approx)
             ar = w / float(h)
 
-            # EU-båndet er højt og smalt (Aspect Ratio bør være ca. 0.15 - 0.45)
-            # Samtidig bør det ligge helt over i venstre side (x skal være lav)
             if 0.15 <= ar <= 0.45 and x < image.shape[1] * 0.2:
+                # 1. Selve EU-mærket
                 EUC_crop = image[y:y+h, x:x+w]
-                break  # Vi har fundet EU-mærket
+                
+                # 2. Nummerpladen hvor EU-mærket er skåret FRA
+                # Vi starter ved (x + w), som er lige til højre for EU-mærket
+                plate_without_EUC = image[:, x+w:]
+                break
 
-    if EUC_crop is not None:
-        cv2.imshow("Resultat EUC", EUC_crop)
+    if plate_without_EUC is not None:
+        cv2.imshow("EU Marke", EUC_crop)
+        cv2.imshow("Nummerplade uden EU-marke", plate_without_EUC)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
-        return EUC_crop
+
+    return plate_without_EUC
   
 if __name__ == "__main__":
     # Sti og filnavn fra din anden kode (Projekt Nummerplade genkendelse)
