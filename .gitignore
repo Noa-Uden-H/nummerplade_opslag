@@ -1,2 +1,4 @@
 cv-projekt.docx
 \nrplates
+\__pycache__
+*.pyc

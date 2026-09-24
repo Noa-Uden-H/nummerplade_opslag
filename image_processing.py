@@ -27,16 +27,11 @@ def IP(image):
             x, y, w, h = cv2.boundingRect(approx)
             ar = w / float(h)
 
+            if ar >= 1.5: return thresh[y:y+h, x:x+w]
             # Et rektangel har et forhold der afviger fra 1.0 (som er kvadrat)
-            shape = "square" if 0.95 <= ar <= 1.05 else "rectangle"
-
-            thresh = thresh[y:y+h, x:x+w]
-           
-
-    cv2.imshow("Resultat", thresh)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-    return thresh
+            #shape = "square" if 0.95 <= ar <= 1.05 else "rectangle"
+            
+            #return thresh[y:y+h, x:x+w]
 
 
 if __name__ == "__main__":

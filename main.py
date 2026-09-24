@@ -12,5 +12,6 @@ for img in os.scandir(imagesfolder):
         path = img.path
         image = cv2.imread(path)
         plate = imp.IP(image)
+        
         text = ocr.ocr(plate, str(img))
         print(text)
