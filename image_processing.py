@@ -40,32 +40,41 @@ def IP(image):
 
 
 def EUC(image):
-    contours, _ = cv2.findContours(image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    
+    # 1. Inverter billedet, så det sorte EU-felt bliver hvidt
+    # OpenCV finder altid hvide objekter på sort baggrund
+    INV_image = cv2.bitwise_not(image)
+
+    # 2. Find konturer på det inverterede billede
+    contours, _ = cv2.findContours(INV_image, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+
+    EUC_crop = None
+
     for contour in contours:
         # Filtrér helt små støj-konturer fra
-        if cv2.contourArea(contour) < 300:
+        if cv2.contourArea(contour) < 500:
             continue
-    
-        # 1. Tilnærm konturen til en geometrisk form
+
+        # Tilnærm konturen til en geometrisk form
         peri = cv2.arcLength(contour, True)
         approx = cv2.approxPolyDP(contour, 0.02 * peri, True)
-    
-        # 2. Tjek om formen har 4 hjørner (rektangel / kvadrat)
+
+        # Tjek om formen har 4 hjørner (rektangel)
         if len(approx) == 4:
-            print("test")
             x, y, w, h = cv2.boundingRect(approx)
             ar = w / float(h)
-    
-            # Et rektangel har et forhold der afviger fra 1.0 (som er kvadrat)
-            shape = "square" if 0.95 <= ar <= 1.05 else "rectangle"
-    
-            EUC = image[y:y+h, x:x+w]
 
-            cv2.imshow("Resultat EUC", EUC)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+            # EU-båndet er højt og smalt (Aspect Ratio bør være ca. 0.15 - 0.45)
+            # Samtidig bør det ligge helt over i venstre side (x skal være lav)
+            if 0.15 <= ar <= 0.45 and x < image.shape[1] * 0.2:
+                EUC_crop = image[y:y+h, x:x+w]
+                break  # Vi har fundet EU-mærket
 
+    if EUC_crop is not None:
+        cv2.imshow("Resultat EUC", EUC_crop)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+        return EUC_crop
+  
 if __name__ == "__main__":
     # Sti og filnavn fra din anden kode (Projekt Nummerplade genkendelse)
     mydir = os.path.expanduser(
