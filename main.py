@@ -12,6 +12,11 @@ for img in os.scandir(imagesfolder):
         path = img.path
         image = cv2.imread(path)
         plate = imp.IP(image)
-        
-        text = ocr.ocr(plate, str(img))
+        if plate is None:
+            print("Couldn't find a plate")
+            continue
+
+        plate_wo_eu = imp.EUC(plate)
+            
+        text = ocr.ocr(plate_wo_eu, str(img))
         print(text)

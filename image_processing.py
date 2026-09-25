@@ -64,8 +64,9 @@ def EUC(image):
         cv2.imshow("Nummerplade uden EU-marke", plate_without_EUC)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
+        return plate_without_EUC
 
-    return plate_without_EUC
+    return image
   
 if __name__ == "__main__":
     # Sti og filnavn fra din anden kode (Projekt Nummerplade genkendelse)
