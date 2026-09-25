@@ -79,8 +79,8 @@ if __name__ == "__main__":
     mydir = os.path.expanduser(
         "~\\OneDrive - TEC\\Informatik\\3.g\\Machine learning\\Projekt Nummerplade genkendelse\\Billeder_test"
     )
-    # myfile = "IMG_7076.jpg"
-    myfile = "Screenshot 2026-09-23 144340.png"
+    myfile = "IMG_7076.jpg"
+    #myfile = "IMG_7099.JPEG"
 
     path = pathlib.Path(mydir, myfile)
     image = cv2.imread(str(path))
