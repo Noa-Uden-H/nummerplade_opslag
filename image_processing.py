@@ -67,7 +67,7 @@ def EUC(image):
                 break
 
     if plate_without_EUC is not None:
-        cv2.imshow("EU Marke", EUC_crop)
+        #cv2.imshow("EU Marke", EUC_crop)
         cv2.imshow("Nummerplade uden EU-marke", plate_without_EUC)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
