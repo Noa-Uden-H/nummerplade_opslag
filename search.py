@@ -29,6 +29,20 @@ def find_data(h_type: str, html):
     return "Header not found"
 
 
+def check_plate(plate: str):
+    import re
+    parsed_plate = re.sub(r'[^a-zA-Z0-9]','', plate)
+    plate_format = ["a","a","n","n","n","n","n"]
+    
+    if len(parsed_plate) != len(plate_format):
+        return None
+
+    for i, char in enumerate(parsed_plate):
+        if not (plate_format[i] == "a" and char.isalpha() or plate_format[i] == "n" and char.isnumeric()):
+            return None
+    
+    return parsed_plate
+
 
 def test(plate) -> str:
     from urllib.request import urlopen, Request
@@ -51,3 +65,4 @@ def test(plate) -> str:
 
 if __name__ == "__main__":
     print(search_plate("ea57302"))
+    print(check_plate("ET #àáâ96 00 6,!"))
