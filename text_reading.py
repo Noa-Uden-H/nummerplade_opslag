@@ -30,15 +30,35 @@ def ocr_test(imgpath, imname) -> str:
     cv2.destroyAllWindows()
     return extracted_text
 
+
+def ocr_test2() -> None:
+    import cv2
+    import pytesseract as tess
+
+    imagesfolder = "C:\\temp_cars"
+    tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+    
+    for img in os.scandir(imagesfolder):
+        if img.is_file():
+            print("---------")
+
+            path = img.path
+            image = cv2.imread(path)
+            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            thresh = cv2.threshold(gray, 1,255,cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
+            print(tess.image_to_string(thresh, config="--psm 6"))
+
 if __name__ == "__main__":
     # import pathlib
     import os
     # import cv2
 
-    imagesfolder = os.path.expanduser("~\\OneDrive - TEC\\Documents\\_hcoe\\3.m\\informatik_b\\5_machinelearning\\Projekt\\nrplates")
+    # imagesfolder = os.path.expanduser("~\\OneDrive - TEC\\Documents\\_hcoe\\3.m\\informatik_b\\5_machinelearning\\Projekt\\nrplates")
     
-    for img in os.scandir(imagesfolder):
-        if img.is_file():
-            path = img.path
-            text = ocr_test(path,str(img))
-            print(text)
+    # for img in os.scandir(imagesfolder):
+        # if img.is_file():
+            # path = img.path
+            # text = ocr_test(path,str(img))
+            # print(text)
+
+    ocr_test2()
