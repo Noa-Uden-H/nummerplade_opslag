@@ -14,6 +14,7 @@ def search_plate(plate: str) -> str:
         html = urlopen(req).read().decode("utf-8")
     except (HTTPError, URLError) as e:
         print(f"Error {e}")
+        return None
 
     data = find_data("title", html)
     return data
@@ -29,7 +30,7 @@ def find_data(h_type: str, html):
     return "Header not found"
 
 
-def check_plate(plate: str):
+def check_plate(plate: str) -> str:
     import re
     parsed_plate = re.sub(r'[^a-zA-Z0-9]','', plate)
     plate_format = ["a","a","n","n","n","n","n"]
