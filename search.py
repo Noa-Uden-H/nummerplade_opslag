@@ -33,16 +33,28 @@ def find_data(h_type: str, html):
 def check_plate(plate: str) -> str:
     import re
     parsed_plate = re.sub(r'[^a-zA-Z0-9]','', plate)
-    plate_format = ["a","a","n","n","n","n","n"]
     
-    if len(parsed_plate) != len(plate_format):
-        return None
-
-    for i, char in enumerate(parsed_plate):
-        if not (plate_format[i] == "a" and char.isalpha() or plate_format[i] == "n" and char.isnumeric()):
-            return None
+    parsed_plate = check_errors(parsed_plate)
     
     return parsed_plate
+
+
+def check_errors(plate: str) -> str:
+    import re
+
+    plate_format = ["a","a","n","n","n","n","n"]
+    
+    if len(plate) != len(plate_format):
+        if re.fullmatch(r'[a-zA-Z]{3}', plate[:3]) and (len(plate) == len(plate_format) + 1):
+                plate = plate[1:]
+        else:
+            return None
+    
+    for i, char in enumerate(plate):
+        if not (plate_format[i] == "a" and char.isalpha() or plate_format[i] == "n" and char.isnumeric()):
+            print(i, char)
+            return None
+    return plate
 
 
 def test(plate) -> str:
