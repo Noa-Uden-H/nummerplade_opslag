@@ -5,7 +5,7 @@ def ocr(img, imname) -> str:
     tess.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
     cv2.imshow(imname,img)
-    extracted_text = tess.image_to_string(img, config="--psm 6")
+    extracted_text = tess.image_to_string(img, config="--psm 7")
 
     cv2.waitKey(0) # Waits for any key
     cv2.destroyAllWindows()
